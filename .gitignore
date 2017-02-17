@@ -2,7 +2,9 @@
 /target/*
 /.idea/*
 *.iml
-/webgame-dao/target/*
-/webgame-service/target/*
-/webgame-start/target/*
-/webgame-web/target/*
+/monitor-dal/target/*
+/monitor-service/target/*
+/monitor-start/target/*
+/monitor-web/target/*
+/monitor-security/target/*
+/monitor-utils/target/*

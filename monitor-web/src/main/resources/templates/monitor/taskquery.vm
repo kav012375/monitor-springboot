@@ -1,0 +1,379 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">处理任务</h1>
+    </div>
+
+</div>
+##真正的内容加载
+<div id="content" class="row">
+    <div class="col-lg-12" style="max-width: 1170px !important;min-width: 450px !important;">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                任务列表
+            </div>
+            <div class="panel-body" id="dataTableBody" style="display: none;">
+                <table id="dataTable" class="table table-striped table-bordered table-hover" style="width: 100%;">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>状态</th>
+                        <th>分组</th>
+                        <th>项目名称</th>
+                        <th>循环类型</th>
+                        <th>剩余次数</th>
+                        <th>总次数</th>
+                        <th>操作</th>
+                        <th>任务内容</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        #foreach(${dataCell} in ${datasource})
+                        <tr id="trRow${dataCell.id}">
+                            <td>${dataCell.id}</td>
+                            <td id="tdStatus${dataCell.id}">
+                                #if(${dataCell.status} == 0)
+                                    未完成
+                                #elseif(${dataCell.status} == 2)
+                                    运行完成
+                                #else
+                                    未知
+                                #end
+                            </td>
+                            <td id="tdMgroup${dataCell.id}">
+                                ${dataCell.mgroup}
+                            </td>
+                            <td id="tdProjectName${dataCell.id}">
+                                ${dataCell.projectName}
+                            </td>
+                            <td>
+                                #if(${dataCell.loopType} == 2)
+                                    单次任务
+                                #elseif(${dataCell.loopType} == 1)
+                                    每日循环
+                                #else
+                                    未设置
+                                #end
+                            </td>
+                            <td>${dataCell.runTimes}</td>
+                            <td id="tdLoopRunTimes${dataCell.id}">
+                                ${dataCell.loopRunTimes}
+                            </td>
+                            <td>
+                                <button class="btn btn-primary btn-xs">启动任务</button>
+                                <button class="btn btn-warning btn-xs">停止任务</button>
+                                <button id="btnModify${dataCell.id}" class="btn btn-success btn-xs"
+                                        onclick="modifyTask(${dataCell.id})">修改任务
+                                </button>
+                                <button id="btnDelete${dataCell.id}" class="btn btn-danger btn-xs"
+                                        onclick="deleteTask(${dataCell.id})">删除任务
+                                </button>
+                            </td>
+                            <td id="tdTaskContent${dataCell.id}">
+                                ${dataCell.taskContent}
+                            </td>
+                        </tr>
+                        #end
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+##弹出的模态提示框
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            ##                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body" id="myModalContent">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">关 闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+##修改任务模态框
+<div class="modal fade" id="modifyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modifyModalTitle"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        修改任务
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-lg-6">
+                            <form role="form">
+                                <div class="form-group">
+                                    <label>任务编号</label>
+                                    <input class="form-control" id="selectTaskId" disabled="disabled"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>任务状态</label>
+                                    <input class="form-control" id="selectTaskStatus" disabled="disabled"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>分组编号</label>
+                                    <input id="selectGroup" class="form-control"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>项目名称</label>
+                                    <input id="selectProjectName" class="form-control"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>循环次数</label></label>
+                                    <input class="form-control" id="selectLoopTimes"/>
+                                </div>
+                                <div class="form-group">
+                                    <label>评论类型</label>
+                                    <select id="articleTypeSelect" class="form-control">
+                                        <option value="null" selected = selected>无须评论</option>
+                                        #foreach(${art} in ${artList})
+                                            <option value="${art.id}">${art.articleTypeName}</option>
+                                        #end
+                                    </select>
+                                </div>
+                                <div class="form-group input-group col-lg-12">
+                                    <label>是否需要过滤ip</label>
+                                    <select id="ipFilterType" class="form-control">
+                                        <option value="true" selected = selected>需要过滤</option>
+                                        <option value="false">无须过滤</option>
+                                    </select>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-lg-6">
+                            <form role="form">
+                                <label>动作集合</label>
+                                <textarea id="mTaskAction" class="form-control" style="resize: none;"/>
+                            </form>
+                            <form role="form">
+                                <label>位置集合</label>
+                                <textarea id="mTaskPosition" class="form-control" style="resize: none;"/>
+                            </form>
+                            <button id="loadCurrentActionsAndPositions" onclick="loadCurrentTaskContent()" type="button" class="btn btn-success">加载当前任务</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btnConfirmChange" onclick="confirmChange()">提交修改</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal">取消修改</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function modifyTask(id) {
+        var status = $.trim($("#tdStatus" + id).text());
+        var mgroup = $.trim($("#tdMgroup" + id).text());
+        var projectName = $.trim($("#tdProjectName" + id).text());
+        var loopRuntimes = $.trim($("#tdLoopRunTimes" + id).text())
+        $("#selectTaskId").val(id);
+        $("#selectTaskStatus").val(status);
+        $("#selectGroup").val(mgroup);
+        $("#selectProjectName").val(projectName);
+        $("#selectLoopTimes").val(loopRuntimes);
+        $('#modifyModal').modal('show');
+
+    }
+    function confirmChange() {
+        $("#btnConfirmChange").button('loading');
+        var id = $("#selectTaskId").val();
+        var status = $("#selectTaskStatus").val();
+        var mgroup = $("#selectGroup").val();
+        var projectName = $("#selectProjectName").val();
+        var loopTimes = $("#selectLoopTimes").val();
+        var actions = $("#mTaskAction").val();
+        var positions = $("#mTaskPosition").val();
+        var artType = $("#articleTypeSelect").val();
+        var ipFilterType = $("#ipFilterType").val();
+
+        if (id == "" || status == "" || mgroup == "" || projectName == "" || loopTimes == "") {
+            $.confirm({
+                title: '警告',
+                content: '参数不完整！',
+                buttons: {
+                    "确认": function () {
+                        return;
+                    }
+                }
+            });
+            $("#btnConfirmChange").button('reset');
+            return;
+        }
+
+
+        $.post("/task/modifytask",
+                {
+                    taskid: id,
+                    status: status,
+                    mgroup: mgroup,
+                    projectname: projectName,
+                    looptimes: loopTimes,
+                    actions:actions,
+                    positions:positions,
+                    artType:artType,
+                    ipFilter:ipFilterType
+                },
+                function (data) {
+                    if(data == "更新成功！"){
+                        $.confirm({
+                            title: '结果',
+                            content: '更新成功,请刷新表格！',
+                            buttons: {
+                                "确认": function () {
+                                    $("#btnConfirmChange").button('reset');
+                                    $("#modifyModal").modal("hide");
+                                    return;
+                                }
+                            }
+                        });
+                    }else{
+                        $.confirm({
+                            title: '警告',
+                            content: data,
+                            buttons: {
+                                "确认": function () {
+                                    $("#btnConfirmChange").button('reset');
+                                    return;
+                                }
+                            }
+                        });
+                    }
+                });
+        $("#btnConfirmChange").button('reset');
+    }
+    function deleteTask(id) {
+        if (id == null) {
+            return;
+        }
+        $.confirm({
+            title: '警告!',
+            content: '确认删除数据吗!',
+            buttons: {
+                "确认": function () {
+                    $("#btnDelete" + id).button('loading');
+                    $.post('/task/deleteTask', {taskid: id}, function (data) {
+                        console.log(data);
+                        if (data == "删除成功") {
+                            var table = $("#dataTable").DataTable();
+                            table.row($("#trRow" + id)).remove().draw();
+                        }
+                        $("#myModalLabel").html("操作结果");
+                        $("#myModalContent").html(data);
+                        $('#myModal').modal('show');
+                    });
+                },
+                "取消": function () {
+                }
+            }
+        });
+        $("#btnDelete" + id).button('reset');
+    }
+    function loadCurrentTaskContent() {
+        var id = $("#selectTaskId").val();
+        $.post('/data/getTaskActionAndPosition.do',
+                {id:id},
+                function (data) {
+                    if(data == "任务不存在"){
+                        $.confirm({
+                            title: '警告',
+                            content: '任务不存在！',
+                            buttons: {
+                                "确认": function () {
+                                    return;
+                                }
+                            }
+                        });
+                    }else if(data == "获取异常"){
+                        $.confirm({
+                            title: '警告',
+                            content: '系统异常！',
+                            buttons: {
+                                "确认": function () {
+                                    return;
+                                }
+                            }
+                        });
+                    }else{
+                        var result = String(data);
+                        var actions = result.split("&&&&")[0];
+                        console.log("actions = " + actions);
+                        var position = result.split("&&&&")[1];
+                        console.log("positions = " + position);
+                        $("#mTaskAction").val(actions);
+                        $("#mTaskPosition").val(position);
+                    }
+                });
+    }
+    $("#dataTable").ready(function () {
+        $('#dataTable').dataTable({
+            "bStateSave": true, ##存储当前状态，每次刷新表格，都停留在上次显示的位置
+            fixedHeader: true,
+            pageLength: 10,
+            responsive: true,
+            searchDelay: 1000,
+            "processing": true,
+            "ordering": false,
+            "language": {
+                "paginate": {
+                    "last": "Last page",
+                    "next": "下一页",
+                    "previous": "上一页",
+                },
+                searchPlaceholder: "请输入查询条件",
+                "search": "搜索：",
+//                "info":"当前第 _PAGE_ 页，总计 _PAGES_ 页",
+                "info": "显示 _START_ 到 _END_ 个任务，总计 _TOTAL_ 任务",
+                "lengthMenu": "显示 _MENU_ 记录每页",
+                "sZeroRecords": "对不起，查询不到任何相关数据",
+                "sEmptyTable": "未有相关数据",
+                "sLoadingRecords": "正在加载数据-请等待...",
+            },
+            "initComplete": function (settings, json) {
+                $('#dataTableBody').css("display", "block");
+            }
+        });
+
+        //====给每列添加搜索框
+        $("#dataTable tfoot th").each(function(){
+            var title = $('#dataTable thead th').eq( $(this).index() ).text();
+            if(title == "分组" || title == "项目名称" || title == "状态"){
+                $(this).html( '<input type="text" class="footer-search" placeholder="搜索'+'" />' );
+            }
+        });
+
+        var table = $('#dataTable').DataTable();
+        table.columns().eq( 0 ).each( function ( colIdx ) {
+            $( 'input', table.column( colIdx ).footer() ).on( 'keyup change', function () {
+                table
+                        .column( colIdx )
+                        .search( this.value )
+                        .draw();
+            } );
+        } );
+        //=====搜索添加结束
+    });
+</script>
