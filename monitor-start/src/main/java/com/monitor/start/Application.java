@@ -13,7 +13,12 @@ import java.util.List;
  * Created by zeusw on 2017/2/15.
  */
 @SpringBootApplication
-@ComponentScan(value = {"com.monitor.web","com.monitor.service","com.monitor.dal","com.monitor.start"})
+@ComponentScan(value = {
+        "com.monitor.web",
+        "com.monitor.service",
+        "com.monitor.dal",
+        "com.monitor.start",
+        "com.monitor.security"})
 public class Application {
     public static void main(String[] args) throws Exception {
         List<String> argsList = new ArrayList<String>(Arrays.asList(args));

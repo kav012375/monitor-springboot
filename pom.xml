@@ -67,6 +67,11 @@
             </dependency>
             <dependency>
                 <groupId>com.monitor</groupId>
+                <artifactId>monitor</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.monitor</groupId>
                 <artifactId>monitor-dal</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </dependency>
@@ -112,6 +117,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
 
 
 </project>

@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
  * @date 2017/02/17
  */
 @RestController
-@RequestMapping(value = "/")
+@RequestMapping(value = "/test")
 @ControllerAdvice
+
 public class TestMvc {
     @Autowired
     TestService testService;

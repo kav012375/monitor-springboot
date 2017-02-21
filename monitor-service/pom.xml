@@ -21,6 +21,10 @@
             <groupId>com.monitor</groupId>
             <artifactId>monitor-utils</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.monitor</groupId>
+            <artifactId>monitor-security</artifactId>
+        </dependency>
     </dependencies>
 
 
