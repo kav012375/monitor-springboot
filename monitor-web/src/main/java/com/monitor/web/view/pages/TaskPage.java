@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 /**
  * Created by Zeus Feng on 2017/2/21.
  *
@@ -30,6 +32,14 @@ public class TaskPage {
         modelAndView.setViewName("/monitor/taskquery");
         modelAndView.addObject("datasource", taskService.getAllTasks());
         modelAndView.addObject("artList",articleService.getAllArticleTypes());
+        return modelAndView;
+    }
+    @RequestMapping(value = "/add")
+    @ResponseBody
+    public ModelAndView taskPageTaskAdd(){
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.addObject("artList",articleService.getAllArticleTypes());
+        modelAndView.setViewName("/taskconfig/normalTaskConfig");
         return modelAndView;
     }
 }

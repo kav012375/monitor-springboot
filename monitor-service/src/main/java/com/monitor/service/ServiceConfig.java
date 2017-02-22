@@ -1,9 +1,13 @@
 package com.monitor.service;
 
 import com.monitor.service.article.ArticleService;
+import com.monitor.service.article.ArticlesInformationService;
 import com.monitor.service.article.impl.ArticleImpl;
+import com.monitor.service.article.impl.ArticlesInformationImpl;
 import com.monitor.service.interfaces.request.log.InterfaceRequestLogService;
 import com.monitor.service.interfaces.request.log.impl.InterfaceRequestLogImpl;
+import com.monitor.service.report.DailyReportService;
+import com.monitor.service.report.impl.DailyReportImpl;
 import com.monitor.service.task.TaskService;
 import com.monitor.service.task.impl.TaskImpl;
 import com.monitor.service.user.UserCheckService;
@@ -55,5 +59,19 @@ public class ServiceConfig {
         ArticleService articleService
                 = new ArticleImpl();
         return articleService;
+    }
+
+    @Bean
+    public DailyReportService dailyReportService(){
+        DailyReportService dailyReportService
+                = new DailyReportImpl();
+        return dailyReportService;
+    }
+
+    @Bean
+    public ArticlesInformationService articlesInformationService(){
+        ArticlesInformationService articlesInformationService
+                = new ArticlesInformationImpl();
+        return articlesInformationService;
     }
 }

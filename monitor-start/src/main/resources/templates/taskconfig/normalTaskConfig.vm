@@ -163,7 +163,7 @@
             $("#btnConfirmToUploadTask").button('reset');
             return;
         }
-        $.post("/data/addtask.do",
+        $.post("/task/addtask",
                 {
                     mediaName:mediaName,
                     username:username,

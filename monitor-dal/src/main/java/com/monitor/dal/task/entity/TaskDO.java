@@ -22,26 +22,27 @@ public class TaskDO implements Serializable {
     public TaskDO(){
         this.setLoopType(100);
         this.setRunTimes(-1);
+        this.setLoopRunTimes(-1);
         this.setStatus(-1);
         this.setArticleType("null");
         this.setIpFilter(true);
     }
 
-    @Override
-    public String toString() {
-        return "TaskDO{" +
-                "id=" + id +
-                ", status=" + status +
-                ", taskContent='" + taskContent + '\'' +
-                ", loopType=" + loopType +
-                ", runTimes=" + runTimes +
-                ", mgroup='" + mgroup + '\'' +
-                ", projectName='" + projectName + '\'' +
-                ", loopRunTimes=" + loopRunTimes +
-                ", articleType='" + articleType + '\'' +
-                ", ipFilter=" + ipFilter +
-                '}';
-    }
+//    @Override
+//    public String toString() {
+//        return "TaskDO{" +
+//                "id=" + id +
+//                ", status=" + status +
+//                ", taskContent='" + taskContent + '\'' +
+//                ", loopType=" + loopType +
+//                ", runTimes=" + runTimes +
+//                ", mgroup='" + mgroup + '\'' +
+//                ", projectName='" + projectName + '\'' +
+//                ", loopRunTimes=" + loopRunTimes +
+//                ", articleType='" + articleType + '\'' +
+//                ", ipFilter=" + ipFilter +
+//                '}';
+//    }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;

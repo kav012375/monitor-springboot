@@ -16,4 +16,10 @@ public interface ArticleService {
      * @return
      */
     List<CfgArticlesTypeDO> getAllArticleTypes();
+    CfgArticlesTypeDO findArticleTypeById(int id);
+    CfgArticlesTypeDO findArticleTypeByArticleTypeName(String articleTypeName);
+    int insertNewArticleType(CfgArticlesTypeDO cfgArticlesTypeDO);
+    int deleteArticleTypeById(int id);
+    int deleteArticleTypeByArticleTypeName(String articleTypeName);
+    int updateArticleTypeNameById(CfgArticlesTypeDO cfgArticlesTypeDO);
 }

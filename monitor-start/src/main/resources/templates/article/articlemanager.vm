@@ -122,6 +122,6 @@
         $("#currentSelectValue").val(artId);
         console.log("存储当前选择id"+$("#currentSelectValue").val());
         $("#currentSelectTitle").val($.trim($("#articleTypeSelect").find("option:selected").text()));
-        $("#artListPanel").load("/html/articleslist",{artId:artId});
+        $("#artListPanel").load("/article/list",{artId:artId});
     }
 </script>

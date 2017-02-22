@@ -1,6 +1,7 @@
 package com.monitor.service.task;
 
 import com.monitor.dal.task.entity.TaskDO;
+import com.monitor.service.task.dto.TaskDTO;
 
 import java.util.List;
 
@@ -29,6 +30,6 @@ public interface TaskService {
      */
     List<TaskDO> getAllTasks();
 
-
+    String addNewTask(TaskDTO taskDTO);
 
 }

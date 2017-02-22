@@ -184,12 +184,12 @@
                             <li>
                                 <a href="#3" onclick="btnDataReportClicked()">数据报表</a>
                             </li>
-                            <li>
-                                <a href="#3" onclick="">用户名密码导入</a>
-                            </li>
-                            <li>
-                                <a href="#4" onclick="">评论导入</a>
-                            </li>
+##                            <li>
+##                                <a href="#3" onclick="">用户名密码导入</a>
+##                            </li>
+##                            <li>
+##                                <a href="#4" onclick="">评论导入</a>
+##                            </li>
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
@@ -343,7 +343,7 @@
     }
     function btnAddTask() {
         $("#pageLoadingModal").modal("show");
-        $("#page-wrapper").load("/html/normal_task_config").after(function () {
+        $("#page-wrapper").load("/task/add").after(function () {
             $("#pageLoadingModal").modal("hide");
         });
     }
@@ -361,7 +361,7 @@
     }
     function btnArticleConfigClicked() {
         $("#pageLoadingModal").modal("show");
-        $("#page-wrapper").load("/html/articlemanager").after(function () {
+        $("#page-wrapper").load("/article/manager").after(function () {
             $("#pageLoadingModal").modal("hide");
         });
     }
