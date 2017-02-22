@@ -3,6 +3,7 @@ package com.monitor.service.interfaces.request.log.impl;
 import com.monitor.dal.interfaceRequestLog.dao.InterfaceRequestLogDAO;
 import com.monitor.dal.interfaceRequestLog.dto.InterfaceRequestLogQueryDTO;
 import com.monitor.dal.interfaceRequestLog.entity.InterfaceRequestLogDO;
+import com.monitor.dal.task.entity.TaskDO;
 import com.monitor.service.interfaces.request.log.InterfaceRequestLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -32,10 +33,33 @@ public class InterfaceRequestLogImpl implements InterfaceRequestLogService {
     @Override
     public void saveRequestRecord(final InterfaceRequestLogDO interfaceRequestLogDO) {
         new Thread(new Runnable() {
+            @Override
             public void run() {
                 interfaceRequestLogDAO.insertInterfaceRequestLog(interfaceRequestLogDO);
             }
         }).start();
 
+    }
+
+    @Override
+    public boolean checkDuplicateIp(InterfaceRequestLogQueryDTO interfaceRequestLogQueryDTO) {
+        int resultNum = interfaceRequestLogDAO.checkDuplicateIp(interfaceRequestLogQueryDTO);
+        if (resultNum>=1){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    @Override
+    public InterfaceRequestLogQueryDTO assembleInterfaceRequestLogQyueryUtil(TaskDO taskDO, String ipAddress) {
+        InterfaceRequestLogQueryDTO interfaceRequestLogQueryDTO = new InterfaceRequestLogQueryDTO();
+        Timestamp queryTime = new Timestamp(System.currentTimeMillis());
+        interfaceRequestLogQueryDTO.setEndTime(queryTime.toString().split(" ")[0] + " 23:59:59");
+        interfaceRequestLogQueryDTO.setStartTime(queryTime.toString().split(" ")[0] + " 00:00:00");
+        interfaceRequestLogQueryDTO.setMgroup(taskDO.getMgroup());
+        interfaceRequestLogQueryDTO.setProjectName(taskDO.getProjectName());
+        interfaceRequestLogQueryDTO.setIpAddress(ipAddress);
+        return interfaceRequestLogQueryDTO;
     }
 }

@@ -294,7 +294,7 @@
     }
     function loadCurrentTaskContent() {
         var id = $("#selectTaskId").val();
-        $.post('/data/getTaskActionAndPosition.do',
+        $.post('/task/getTaskActionAndPosition',
                 {id:id},
                 function (data) {
                     if(data == "任务不存在"){

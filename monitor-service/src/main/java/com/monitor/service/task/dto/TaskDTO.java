@@ -19,6 +19,7 @@ public class TaskDTO {
     String loopruntimes;
     String artType;
     String ipFilter;
+    String id;
 
    public TaskDTO(){
         this.mediaName = "default";
@@ -33,6 +34,7 @@ public class TaskDTO {
         this.looptype = "default";
         this.artType = "null";
         this.ipFilter = "true";
+        this.id = "0";
     }
 
     public String getMediaName() {
@@ -129,5 +131,13 @@ public class TaskDTO {
 
     public void setIpFilter(String ipFilter) {
         this.ipFilter = ipFilter;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

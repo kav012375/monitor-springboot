@@ -1,6 +1,8 @@
 package com.monitor.service.interfaces.request.log;
 
+import com.monitor.dal.interfaceRequestLog.dto.InterfaceRequestLogQueryDTO;
 import com.monitor.dal.interfaceRequestLog.entity.InterfaceRequestLogDO;
+import com.monitor.dal.task.entity.TaskDO;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,4 +23,19 @@ public interface InterfaceRequestLogService {
      * @param interfaceRequestLogDO
      */
     void saveRequestRecord(final InterfaceRequestLogDO interfaceRequestLogDO);
+
+    /**
+     * 检查IP是否重复
+     * @param interfaceRequestLogQueryDTO
+     * @return
+     */
+    boolean checkDuplicateIp(final InterfaceRequestLogQueryDTO interfaceRequestLogQueryDTO);
+
+    /**
+     * 组装接口查询条件
+     * @param taskDO
+     * @param ipAddress
+     * @return
+     */
+    InterfaceRequestLogQueryDTO assembleInterfaceRequestLogQyueryUtil(TaskDO taskDO,String ipAddress);
 }
