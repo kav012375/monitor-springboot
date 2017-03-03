@@ -164,7 +164,7 @@
                         </div>
                     </li>
                     <li>
-                        <a href="/html/index"><i class="fa fa-dashboard fa-fw"></i> 主页面板</a>
+                        <a href="/"><i class="fa fa-dashboard fa-fw"></i> 主页面板</a>
                     </li>
                     <li>
                         <a href="#0"><i class="fa fa-bar-chart-o fa-fw"></i> 任务调度<span class="fa arrow"></span></a>

@@ -3,6 +3,8 @@ package com.monitor.service.task;
 import com.monitor.dal.task.entity.TaskDO;
 import com.monitor.service.task.dto.TaskDTO;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -64,5 +66,5 @@ public interface TaskService {
      * @param ipAddress
      * @return
      */
-    String getTask(String request,String ipAddress);
+    String getTask(String request, String ipAddress, HttpServletResponse httpServletResponse) throws Throwable;
 }

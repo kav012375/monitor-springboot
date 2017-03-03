@@ -21,7 +21,10 @@ import com.monitor.service.task.dto.PositionDTO;
 import com.monitor.service.task.dto.TaskDTO;
 import com.monitor.service.task.dto.TaskDistributeDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import sun.security.provider.certpath.OCSPResponse;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -174,7 +177,6 @@ public class TaskImpl implements TaskService {
 
     @Override
     public String modifyTask(TaskDTO taskDTO) {
-        //TODO：检查孔字符
         if(taskDTO.getActions().equals("default")||taskDTO.getPositions().equals("default")
                 || taskDTO.getActions().equals("")||taskDTO.getPositions().equals("")){
             return "动作或位置为空！";
@@ -236,13 +238,15 @@ public class TaskImpl implements TaskService {
     }
 
     @Override
-    public String getTask(String request, String ipAddress) {
+    public String getTask(String request, String ipAddress, HttpServletResponse httpServletResponse) throws Throwable {
+        //httpServletResponse.setCharacterEncoding("utf-8");
         TaskDO taskDO = new TaskDO();
         TaskInstanceDO taskInstanceDO = new TaskInstanceDO();
         Random random = new Random();
         List<TaskDO> taskDOs = new ArrayList<TaskDO>();
         try {
             //获取请求
+            System.out.println("收到请求: "+request);
             JSONObject jsonObject = JSON.parseObject(request);
             String projectName = jsonObject.getString("projectName");
             String mgroup = jsonObject.getString("group");
@@ -250,6 +254,7 @@ public class TaskImpl implements TaskService {
             String accessToken = jsonObject.getString("password");
             String accountType = jsonObject.getString("type");
             if (projectName == null || mgroup == null || ip == null || accessToken == null) {
+                //httpServletResponse.getWriter().print("参数不完整");
                 return "参数不完整";
             }
             taskDO.setProjectName(projectName);
@@ -259,6 +264,7 @@ public class TaskImpl implements TaskService {
             //获取未完成的任务
             taskDOs = taskDAO.findVailedTaskByStatusAndGroupAndProjectAndRuntimes(taskDO);
             if (taskDOs.size() < 1) {
+                //httpServletResponse.getWriter().print("无任务可以领用");
                 return "无任务可以领用";
             }
             /**
@@ -274,7 +280,9 @@ public class TaskImpl implements TaskService {
                         interfaceRequestLogService.assembleInterfaceRequestLogQyueryUtil(taskDO,ipAddress);
                 boolean checResult = interfaceRequestLogService.checkDuplicateIp(interfaceRequestLogQueryDTO);
                 if (!checResult) {
+                    System.out.println("IP被查重，重复IP为："+ipAddress+",\t\t\t当前任务分组："+taskDO.getMgroup()+",\t\t\t当前项目："+taskDO.getProjectName());
                     //发现重复IP过滤掉
+                    //httpServletResponse.getWriter().print("重复的请求IP，被过滤");
                     return "重复的请求IP，被过滤";
                 }
             }
@@ -290,6 +298,7 @@ public class TaskImpl implements TaskService {
             int taskUpdataNum = taskDAO.updateTaskById(taskDO);
             if (taskUpdataNum < 1) {
                 System.out.println("更新task表失败");
+                //httpServletResponse.getWriter().print("更新task表失败");
                 return "更新task表失败";
             }
             taskInstanceDO.setTaskId(taskDO.getId());
@@ -341,6 +350,7 @@ public class TaskImpl implements TaskService {
                     content = JSONObject.toJSONString(infObj);
                 }
             }
+            //httpServletResponse.getWriter().print(content);
             //记录请求日志
             InterfaceRequestLogDO interfaceRequestLogDO = new InterfaceRequestLogDO();
             interfaceRequestLogDO.setInterfaceName("getTask");
@@ -349,10 +359,10 @@ public class TaskImpl implements TaskService {
             interfaceRequestLogDO.setProjectName(taskDO.getProjectName());
             interfaceRequestLogDO.setMgroup(taskDO.getMgroup());
             interfaceRequestLogService.saveRequestRecord(interfaceRequestLogDO);
-
             return content;
         } catch (Exception e) {
             e.printStackTrace();
+            httpServletResponse.getWriter().print("系统异常，异常原因");
             return "系统异常，异常原因："+e.getMessage();
         }finally {
             //销毁大数据

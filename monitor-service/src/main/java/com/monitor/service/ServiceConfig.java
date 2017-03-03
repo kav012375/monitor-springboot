@@ -15,6 +15,7 @@ import com.monitor.service.user.UserService;
 import com.monitor.service.user.impl.UserCheckImpl;
 import com.monitor.service.user.impl.UserImpl;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 /**
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Service;
 public class ServiceConfig {
 
     @Bean
+    @Scope(value = "prototype")
     public TaskService taskService(){
         TaskService taskService
                 = new TaskImpl();

@@ -5,6 +5,7 @@ import com.monitor.service.task.TaskService;
 import com.monitor.service.task.dto.TaskDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +18,7 @@ import javax.servlet.http.HttpSession;
  * @date 2017/02/22
  */
 @RestController
-@RequestMapping(value = "/task",method = RequestMethod.POST)
+@RequestMapping(value = "/task")
 public class Task {
     @Autowired
     TaskService taskService;
@@ -37,7 +38,7 @@ public class Task {
             @RequestParam("projectName") String projectName,
             @RequestParam("looptype") String looptype,
             @RequestParam("artType") String artType,
-            @RequestParam("ipFilter") String ipFilter){
+            @RequestParam("ipFilter") String ipFilter) {
 
         TaskDTO taskDTO = new TaskDTO();
         taskDTO.setMediaName(mediaName);
@@ -56,15 +57,15 @@ public class Task {
     }
 
     @ResponseBody
-    @RequestMapping(value = "/getTaskActionAndPosition",method = RequestMethod.POST)
-    public String taskActionGetTaskActionAndPosition(@RequestParam("id") String taskId){
+    @RequestMapping(value = "/getTaskActionAndPosition", method = RequestMethod.POST)
+    public String taskActionGetTaskActionAndPosition(@RequestParam("id") String taskId) {
         return taskService.getTaskActionAndPosition(Long.parseLong(taskId));
     }
 
     @RequestMapping(value = "/deleteTask")
     @ResponseBody
-    public String taskActionDeleteTask(@RequestParam("taskid") String taskId){
-       return taskService.deleteTask(Long.parseLong(taskId));
+    public String taskActionDeleteTask(@RequestParam("taskid") String taskId) {
+        return taskService.deleteTask(Long.parseLong(taskId));
     }
 
     @ResponseBody
@@ -78,7 +79,7 @@ public class Task {
             @RequestParam("positions") String positions,
             @RequestParam("artType") String artType,
             @RequestParam("ipFilter") String ipFilter
-    ){
+    ) {
         TaskDTO taskDTO = new TaskDTO();
         taskDTO.setId(taskId);
         taskDTO.setMgroup(mgroup);
@@ -93,10 +94,21 @@ public class Task {
 
     @ResponseBody
     @RequestMapping(value = "/gettask")
-    public String taskActionGetTask(
+    public ModelAndView taskActionGetTask(
             HttpServletRequest httpServletRequest,
+            HttpServletResponse httpServletResponse,
             @RequestParam("request") String request
-    ){
-        return taskService.getTask(request,encryptionService.GetRealIpAddr(httpServletRequest));
+    ) {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("/taskconfig/taskresult");
+//        return taskService.getTask(request,encryptionService.GetRealIpAddr(httpServletRequest));
+        String ipAddress = encryptionService.GetRealIpAddr(httpServletRequest);
+        try {
+            modelAndView.addObject("result",taskService.getTask(request, ipAddress, httpServletResponse));
+        } catch (Throwable e) {
+            modelAndView.addObject("result","系统异常");
+            return modelAndView;
+        }
+        return modelAndView;
     }
 }

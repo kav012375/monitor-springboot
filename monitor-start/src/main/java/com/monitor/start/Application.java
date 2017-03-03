@@ -3,6 +3,7 @@ package com.monitor.start;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
  * Created by zeusw on 2017/2/15.
  */
 @SpringBootApplication
+@EnableScheduling
 @ComponentScan(value = {
         "com.monitor.web",
         "com.monitor.service",
